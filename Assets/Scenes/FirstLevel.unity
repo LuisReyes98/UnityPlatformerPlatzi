@@ -248,6 +248,7 @@ MonoBehaviour:
   SPEED: 4
   JUMP_SPEED: 300
   playerAnimator: {fileID: 158395089}
+  MAX_JUMP_ANGLE: -0.7
 --- !u!95 &158395089
 Animator:
   serializedVersion: 3
