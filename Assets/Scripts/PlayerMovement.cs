@@ -13,10 +13,9 @@ public class PlayerMovement : MonoBehaviour
     public float MAX_JUMP_ANGLE = -0.7f;
     bool isGrounded = true;
     bool stopJump = false;
-    
-    
+        
     // Start is called before the first frame update
-    void Start()
+    void Start()    
     {
         
     }
@@ -109,6 +108,5 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
     
 }
