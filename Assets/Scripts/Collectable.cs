@@ -5,14 +5,21 @@ using UnityEngine.UI;
 
 public class Collectable : MonoBehaviour
 {
-
-    [SerializeField]
     private static int collectableQuantity = 0;
-    public Text collectableText;
+    Text collectableText; //ya que esto se vuelve un prefab no funcionara tener elementos por referencia 
+    ParticleSystem collectableParticle;
+
+    AudioSource collectableAudio;
+
     // Start is called before the first frame update    
     void Start()
     {
+        collectableText = GameObject.Find("CollectableQuantityText").GetComponent<Text>();
         
+        // collectableText = GameObject.FindObjectOfType(Text);// esto puede dar error si hay mas de un objeto con el mismo tipo de dato
+
+        collectableParticle = GameObject.Find("CollectableParticle").GetComponent<ParticleSystem>(); //particula del collecionable
+        collectableAudio = GetComponentInParent<AudioSource>(); //sonido del collecionable
     }
 
     // Update is called once per frame
@@ -24,6 +31,12 @@ public class Collectable : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider) {
         if (collider.CompareTag("Player"))
         {
+            collectableParticle.transform.position = transform.position; //make the particle be in the same postion as the collectable
+            
+            collectableParticle.Play();//play particle 
+            
+            collectableAudio.Play();//play audio
+
             gameObject.SetActive(false);
             collectableQuantity++;
             if (collectableQuantity <= 9)

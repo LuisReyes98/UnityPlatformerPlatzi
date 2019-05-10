@@ -7,52 +7,66 @@ public class EnemyBehaviour : MonoBehaviour
     Rigidbody2D enemyRb;
     SpriteRenderer enemySpriteRender;
     Animator enemyAnimator;
-    
+    ParticleSystem onDeathParticle;
+    AudioSource deathSound;
+
 
     float timeBeforeChange;
     public float delay = .5f;
-    public float speed = .3f;
-
+    public float speed = .3f;    
+    public bool isWalker = true;
     // Start is called before the first frame update
     void Start()
     {
-        enemyRb = GetComponent<Rigidbody2D>();
+        enemyRb = GetComponent<Rigidbody2D>(); //get rigid body of self       
         enemySpriteRender = GetComponent<SpriteRenderer>();
+        
         enemyAnimator = GetComponent<Animator>();
-        enemyAnimator.SetBool("isAlive", true);
+        
+        enemyAnimator.SetBool("isAlive", true); //the enemy is alive
+        
+        //EnemyParticle
+        onDeathParticle = GameObject.Find("EnemyParticle").GetComponent<ParticleSystem>();
 
+        deathSound = GetComponentInParent<AudioSource>();
     }
 
     // Update is called once per frame    
     void Update()
     {   
-        enemyRb.velocity = Vector2.right * speed;
+        if (isWalker)
+        {
+            enemyRb.velocity = Vector2.right * speed;   
+            // si el if ejecuta una sola linea no hace falta llaves
+            if (speed > 0)
+            {
+                enemySpriteRender.flipX = false;
+                enemyAnimator.SetBool("isWalking", true);
+            }
+            else if(speed < 0)
+            {
+                enemySpriteRender.flipX = true;
+                enemyAnimator.SetBool("isWalking", true);
+            }else
+            {
+                enemyAnimator.SetBool("isWalking", false);
+            }            
+            // Timer simple
+            // Time.time , tiempo desde que empezo la aplicacion 
+            if (timeBeforeChange < Time.time)
+            {
+                // Cada que se ejecuta se le añade el tiempo de la proxima ejecución
+                speed *= -1;
+                // se ejecuta cada cierto tiempo
+                timeBeforeChange = Time.time + delay; //el tiempo actual mas el delay
+            }
+        }else{
 
-        // si el if ejecuta una sola linea no hace falta llaves
-        if (speed > 0)
-        {
-            enemySpriteRender.flipX = false;
-            enemyAnimator.SetBool("isWalking", true);
-        }
-        else if(speed < 0)
-        {
-            enemySpriteRender.flipX = true;
-            enemyAnimator.SetBool("isWalking", true);
-        }else
-        {
             enemyAnimator.SetBool("isWalking", false);
         }
 
 
-        // Timer simple
-        // Time.time , tiempo desde que empezo la aplicacion 
-        if (timeBeforeChange < Time.time)
-        {
-            // Cada que se ejecuta se le añade el tiempo de la proxima ejecución
-            speed *= -1;
-            // se ejecuta cada cierto tiempo
-            timeBeforeChange = Time.time + delay; //el tiempo actual mas el delay
-        }
+
 
 
     }
@@ -64,11 +78,15 @@ public class EnemyBehaviour : MonoBehaviour
     /// <param name="collision">The Collision2D data associated with this collision.</param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") )
+        // Death collision
+        if (collision.gameObject.CompareTag("Player") ) //if it is player kill enemy
         {
             if (transform.position.y + .3f < collision.transform.position.y)
             {
-                enemyAnimator.SetBool("isAlive", false);
+                enemyAnimator.SetBool("isAlive", false); //no esta vivo
+                onDeathParticle.transform.position = transform.position; // particulas moverlas a donde esta el enemigo
+                onDeathParticle.Play(); //reproducir paticulas
+                deathSound.Play(); //reproducir sonido de muerte
 
             }
         }
