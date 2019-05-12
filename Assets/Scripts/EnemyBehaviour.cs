@@ -81,7 +81,7 @@ public class EnemyBehaviour : MonoBehaviour
         // Death collision
         if (collision.gameObject.CompareTag("Player") ) //if it is player kill enemy
         {
-            if (transform.position.y + .3f < collision.transform.position.y)
+            if (transform.position.y + .3f < collision.transform.position.y) //if the collision comes from above the Enemy
             {
                 enemyAnimator.SetBool("isAlive", false); //no esta vivo
                 onDeathParticle.transform.position = transform.position; // particulas moverlas a donde esta el enemigo

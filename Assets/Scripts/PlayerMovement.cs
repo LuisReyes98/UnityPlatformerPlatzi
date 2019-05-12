@@ -40,14 +40,13 @@ public class PlayerMovement : MonoBehaviour
             // Por get component es mas lento
             GetComponent<SpriteRenderer>().flipX = false;
             // pero si es algo sencillo es mas facil que asignar una referencia
-            walkingSound.Play();
+            
 
 
         }else if (Input.GetAxis("Horizontal") < 0)
         {
             playerAnimator.SetBool("isWalking", true);
             GetComponent<SpriteRenderer>().flipX = true;
-            walkingSound.Play();
 
 
         }
@@ -56,13 +55,12 @@ public class PlayerMovement : MonoBehaviour
         //  Accion de saltar
         if (isGrounded)//si esta en el piso
         {
-
+            
             playerAnimator.SetBool("isJumping", false);//no esta saltando
             // El jugador Salta
             if (Input.GetKeyDown(KeyCode.Space))//preciona la tecla
             {
                 jumpingSound.Play(); //sonido de saltar
-                walkingSound.Stop();
                 playerRgBody.AddForce(Vector2.up * JUMP_SPEED );
                 isGrounded = false;
                 stopJump = true;
@@ -71,6 +69,13 @@ public class PlayerMovement : MonoBehaviour
             }            
             // playerAnimator.SetTrigger("Jump");
 
+            if (playerRgBody.velocity.x > 0)
+            {
+                walkingSound.Play();
+            }else{
+                walkingSound.Stop();
+
+            }
         }else
         {
             if (stopJump)//para frenar el salto una vez
