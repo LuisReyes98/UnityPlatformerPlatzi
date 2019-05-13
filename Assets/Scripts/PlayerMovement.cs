@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Rigidbody2D playerRgBody;
+    Rigidbody2D playerRgBody;
     public float SPEED = 0.5f;
     public float JUMP_SPEED = 100f;
 
@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()    
     {
+        playerRgBody = GetComponent<Rigidbody2D>();
         jumpingSound = GetComponents<AudioSource>()[0];
         walkingSound = GetComponents<AudioSource>()[1];
     }
