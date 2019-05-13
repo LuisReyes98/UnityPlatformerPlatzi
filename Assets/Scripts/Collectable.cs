@@ -14,6 +14,7 @@ public class Collectable : MonoBehaviour
     // Start is called before the first frame update    
     void Start()
     {
+        collectableQuantity = 0;//de lo contrario el valor se conservaria entre escenas
         collectableText = GameObject.Find("CollectableQuantityText").GetComponent<Text>();
         
         // collectableText = GameObject.FindObjectOfType(Text);// esto puede dar error si hay mas de un objeto con el mismo tipo de dato
